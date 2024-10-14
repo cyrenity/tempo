@@ -12,6 +12,7 @@ jobs:
   version:
     name: Create Version
     permissions: write-all
+    needs: [health]
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
     outputs:
