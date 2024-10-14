@@ -6,10 +6,11 @@ on:
     tags-ignore: ["**"]
 
 jobs:
-  health-check:
+  health:
+    name: Code Quality
     uses: cyrenity/tempo/.github/workflows/health-check.yml@main
   version:
-    name: Version
+    name: Create Version
     permissions: write-all
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
