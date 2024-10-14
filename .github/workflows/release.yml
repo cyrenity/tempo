@@ -6,6 +6,8 @@ on:
     tags-ignore: ["**"]
 
 jobs:
+  health-check:
+    uses: cyrenity/tempo/.github/workflows/health-check.yml@main
   version:
     name: Version
     permissions: write-all
