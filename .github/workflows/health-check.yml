@@ -1,10 +1,9 @@
 name: Health-Check 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-    
+  workflow_call: 
+  
 jobs:
   health-check:
     runs-on: ubuntu-latest
