@@ -1,8 +1,6 @@
 name: Release
 
 on:
-  pull_request:
-    types: [opened, reopened, ready_for_review, synchronize]
   push:
     branches: [main, develop]
     tags-ignore: ["**"]
