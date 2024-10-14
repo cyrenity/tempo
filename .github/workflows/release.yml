@@ -12,6 +12,7 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
     outputs:
+      semver: ${{ steps.format.outputs.semver }}
       semver_tag: ${{ steps.semver-tag.outputs.semver_tag }}
       previous_tag: ${{ steps.semver-tag.outputs.previous_tag }}
       is_prerelease: ${{ steps.semver-tag.outputs.is_prerelease }}
@@ -27,6 +28,13 @@ jobs:
           branching_model: trunk-based
           main_branch_name: "main"
           debug: true
+      - name: Remove v prefix
+        id: format
+        run: |
+          echo "${{ steps.semver-tag.outputs.semver_tag }}"
+          ver=`echo "${{ steps.semver-tag.outputs.semver_tag }}" | sed 's/^v//'`
+          echo "$ver"
+          echo "semver=$ver" >> $GITHUB_OUTPUT
       - name: Create tag
         uses: actions/github-script@v7
         with:
@@ -35,7 +43,7 @@ jobs:
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/${{ steps.semver-tag.outputs.semver_tag#v }}",
+              ref: "refs/tags/${{ steps.semver-tag.outputs.semver_tag }}",
               sha: context.sha
             })
 
@@ -58,7 +66,7 @@ jobs:
       - name: "Create release"
         uses: softprops/action-gh-release@master
         with:
-          name: ${{ needs.version.outputs.semver_tag#v }}
+          name: ${{ needs.version.outputs.semver }}
           tag_name: ${{ needs.version.outputs.semver_tag }}
           prerelease: ${{ needs.version.outputs.is_prerelease }}
           generate_release_notes: true 
@@ -75,5 +83,5 @@ jobs:
             github.rest.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "tags/${{ needs.version.outputs.semver_tag#v }}"
+              ref: "tags/${{ needs.version.outputs.semver_tag }}"
             })
