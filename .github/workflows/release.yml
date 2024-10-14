@@ -10,6 +10,7 @@ on:
 jobs:
   version:
     name: Version
+    permissions: write-all
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
     outputs:
