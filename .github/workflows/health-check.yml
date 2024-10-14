@@ -1,0 +1,14 @@
+name: Health-Check 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check code health
+      run: |
+        echo "Running health check job!"
