@@ -11,4 +11,4 @@ jobs:
     steps:
     - name: Check code health
       run: |
-        echo "Running health check job!
+        echo "Running health check job!"
