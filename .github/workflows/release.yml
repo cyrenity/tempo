@@ -27,7 +27,6 @@ jobs:
         uses: gandarez/semver-action@master
         with:
           branching_model: trunk-based
-          prefix: ""
           main_branch_name: "main"
           debug: true
       - name: Create tag
