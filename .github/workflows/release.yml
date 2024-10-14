@@ -10,7 +10,6 @@ on:
 jobs:
   version:
     name: Version
-    concurrency: tagging
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
     outputs:
