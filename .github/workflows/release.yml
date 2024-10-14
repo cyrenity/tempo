@@ -1,0 +1,26 @@
+name: 'release'
+
+on:
+  push: 
+    branches:
+      - main
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@main 
+
+    - id: semver-tag
+      uses: gandarez/semver-action@master
+      with:
+        main_branch_name: "main"
+        branching_model: "git-flow"
+        debug: "true"
+        
+    - name: "Created tag"
+      run: echo "tag ${{ steps.semver-tag.outputs.semver_tag }}"
+
+
+
