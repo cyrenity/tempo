@@ -10,7 +10,6 @@ on:
 jobs:
   version:
     name: Version
-    permissions: write-all
     concurrency: tagging
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
@@ -19,13 +18,11 @@ jobs:
       previous_tag: ${{ steps.semver-tag.outputs.previous_tag }}
       is_prerelease: ${{ steps.semver-tag.outputs.is_prerelease }}
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      -
-        name: Calculate semver tag
+      - name: Calculate semver tag
         id: semver-tag
         uses: gandarez/semver-action@master
         with:
@@ -35,7 +32,7 @@ jobs:
       - name: Create tag
         uses: actions/github-script@v7
         with:
-          github-token: ${{ github.token }}
+          github-token: ${{ secrets.GH_TOKEN }}
           script: |
             github.rest.git.createRef({
               owner: context.repo.owner,
@@ -64,8 +61,8 @@ jobs:
         if: ${{ failure() }}
         uses: actions/github-script@v7
         with:
-         github-token: ${{ github.token }}
-         script: |
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
             github.rest.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
