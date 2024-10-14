@@ -31,7 +31,7 @@ jobs:
       - name: Create tag
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GH_TOKEN || github.token }}
           script: |
             github.rest.git.createRef({
               owner: context.repo.owner,
@@ -53,14 +53,14 @@ jobs:
       - name: "Create release"
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
-         repo_token: ${{ secrets.GH_TOKEN }}
+         repo_token: ${{ secrets.GH_TOKEN || github.token }}
          automatic_release_tag: ${{ needs.version.outputs.semver_tag }}
          prerelease: false
       - name: Remove tag if failure
         if: ${{ failure() }}
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GH_TOKEN }}
+          github-token: ${{ secrets.GH_TOKEN || github.token }}
           script: |
             github.rest.git.deleteRef({
               owner: context.repo.owner,
