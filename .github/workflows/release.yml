@@ -58,7 +58,7 @@ jobs:
       - name: "Create release"
         uses: softprops/action-gh-release@master
         with:
-          name: ${{ needs.version.outputs.semver_tag }}
+          name: ${{ needs.version.outputs.semver_tag#v }}
           tag_name: ${{ needs.version.outputs.semver_tag }}
           prerelease: ${{ needs.version.outputs.is_prerelease }}
           generate_release_notes: true 
