@@ -1,11 +1,10 @@
 name: Health-Check 
-
 on:
   push:
-    branches: [ "feature/unittests" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "feature/unittests" ]
-
+    branches: [ "main" ]
+    
 jobs:
   health-check:
     runs-on: ubuntu-latest
