@@ -1,26 +1,79 @@
-name: 'release'
+name: Release
 
 on:
-  push: 
-    branches:
-      - main
-      - develop
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize]
+  push:
+    branches: [main, develop]
+    tags-ignore: ["**"]
+
 jobs:
-  build:
+  version:
+    name: Version
+    concurrency: tagging
+    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
+    outputs:
+      semver_tag: ${{ steps.semver-tag.outputs.semver_tag }}
+      previous_tag: ${{ steps.semver-tag.outputs.previous_tag }}
+      is_prerelease: ${{ steps.semver-tag.outputs.is_prerelease }}
     steps:
-    - name: 'Checkout GitHub Action'
-      uses: actions/checkout@main 
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      -
+        name: Calculate semver tag
+        id: semver-tag
+        uses: gandarez/semver-action@master
+        with:
+          branching_model: git-flow
+          prefix: v
+          debug: true
+      - name: Create tag
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "refs/tags/${{ steps.semver-tag.outputs.semver_tag }}",
+              sha: context.sha
+            })
 
-    - id: semver-tag
-      uses: gandarez/semver-action@master
-      with:
-        main_branch_name: "main"
-        branching_model: "trunk-based"
-        debug: "true"
-        
-    - name: "Created tag"
-      run: echo "tag ${{ steps.semver-tag.outputs.semver_tag }}"
-
-
-
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [version]
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      -
+        name: "Create release"
+        uses: softprops/action-gh-release@master
+        with:
+          name: ${{ needs.version.outputs.semver_tag }}
+          tag_name: ${{ needs.version.outputs.semver_tag }}
+          body: "Release test"
+          prerelease: ${{ needs.version.outputs.is_prerelease }}
+          target_commitish: ${{ github.sha }}
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      -
+        name: Remove tag if failure
+        if: ${{ failure() }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN }}
+          script: |
+            github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "tags/${{ needs.version.outputs.semver_tag }}"
+            })
