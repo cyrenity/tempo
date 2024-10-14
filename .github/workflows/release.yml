@@ -48,25 +48,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         
+     # - name: "Create release"
+     #   uses: "marvinpinto/action-automatic-releases@latest"
+     #   with:
+     #    repo_token: ${{ secrets.GH_TOKEN || github.token }}
+     #    automatic_release_tag: ${{ needs.version.outputs.semver_tag }}
+     #    prerelease: false
+
       - name: "Create release"
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: softprops/action-gh-release@master
         with:
-         repo_token: ${{ secrets.GH_TOKEN || github.token }}
-         automatic_release_tag: ${{ needs.version.outputs.semver_tag }}
-         prerelease: false
-
-      # - name: "Create release"
-      #  uses: softprops/action-gh-release@master
-      #  with:
-      #    name: ${{ needs.version.outputs.semver_tag }}
-      #    tag_name: ${{ needs.version.outputs.semver_tag }}
-      #    prerelease: ${{ needs.version.outputs.is_prerelease }}
-      #    generate_release_notes: true 
-      #    draft: false
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      
+          name: ${{ needs.version.outputs.semver_tag }}
+          tag_name: ${{ needs.version.outputs.semver_tag }}
+          prerelease: ${{ needs.version.outputs.is_prerelease }}
+          generate_release_notes: true 
+          draft: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       # - name: Remove tag if failure
       #  if: ${{ failure() }}
