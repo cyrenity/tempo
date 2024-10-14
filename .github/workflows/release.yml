@@ -35,7 +35,7 @@ jobs:
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/${{ steps.semver-tag.outputs.semver_tag }}",
+              ref: "refs/tags/${{ steps.semver-tag.outputs.semver_tag#v }}",
               sha: context.sha
             })
 
@@ -58,7 +58,7 @@ jobs:
       - name: "Create release"
         uses: softprops/action-gh-release@master
         with:
-          name: ${{ needs.version.outputs.semver_tag }}
+          name: ${{ needs.version.outputs.semver_tag#v }}
           tag_name: ${{ needs.version.outputs.semver_tag }}
           prerelease: ${{ needs.version.outputs.is_prerelease }}
           generate_release_notes: true 
@@ -66,14 +66,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
-      # - name: Remove tag if failure
-      #  if: ${{ failure() }}
-      #  uses: actions/github-script@v7
-      #  with:
-      #    github-token: ${{ secrets.GH_TOKEN || github.token }}
-      #    script: |
-      #      github.rest.git.deleteRef({
-      #        owner: context.repo.owner,
-      #        repo: context.repo.repo,
-      #        ref: "tags/${{ needs.version.outputs.semver_tag }}"
-      #      })
+      - name: Remove tag if failure
+        if: ${{ failure() }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GH_TOKEN || github.token }}
+          script: |
+            github.rest.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: "tags/${{ needs.version.outputs.semver_tag#v }}"
+            })
