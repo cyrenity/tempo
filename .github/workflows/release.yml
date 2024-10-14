@@ -4,14 +4,14 @@ on:
   pull_request:
     types: [opened, reopened, ready_for_review, synchronize]
   push:
-    branches: [master, develop]
+    branches: [main, develop]
     tags-ignore: ["**"]
 
 jobs:
   version:
     name: Version
     concurrency: tagging
-    if: ${{ github.ref == 'refs/heads/master' || github.ref == 'refs/heads/develop' }}
+    if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
     outputs:
       semver_tag: ${{ steps.semver-tag.outputs.semver_tag }}
