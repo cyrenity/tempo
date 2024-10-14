@@ -50,25 +50,22 @@ jobs:
     runs-on: ubuntu-latest
     needs: [version]
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - 
-       name: "Create release"
-       uses: "marvinpinto/action-automatic-releases@latest"
-       with:
+      - name: "Create release"
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
          repo_token: ${{ secrets.GH_TOKEN }}
          automatic_release_tag: ${{ needs.version.outputs.semver_tag }}
          prerelease: false
-      -
-        name: Remove tag if failure
+      - name: Remove tag if failure
         if: ${{ failure() }}
         uses: actions/github-script@v7
         with:
-          github-token: ${{ github.token }}
-          script: |
+         github-token: ${{ github.token }}
+         script: |
             github.rest.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
