@@ -2,7 +2,7 @@ name: Build Docker Images
 on:
     workflow_call:
         inputs:
-          version:
+          semver:
             required: true
             type: string
 
@@ -24,6 +24,6 @@ jobs:
       run: |
         docker build . \
             --tag ghcr.io/cyrenity/tempo-app:latest \
-            --tag ghcr.io/cyrenity/tempo-app:${{ inputs.version }} 
+            --tag ghcr.io/cyrenity/tempo-app:${{ inputs.semver }} 
         docker push ghcr.io/cyrenity/tempo-app:latest
-        docker push ghcr.io/cyrenity/tempo-app:${{ inputs.version }}
+        docker push ghcr.io/cyrenity/tempo-app:${{ inputs.semver }}
