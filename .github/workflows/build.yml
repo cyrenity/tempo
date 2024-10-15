@@ -19,11 +19,18 @@ jobs:
         registry: ghcr.io
         username: cyrenity
         password: ${{ github.token || secrets.GH_TOKEN }}
-   
+
+    - name: Normalize version string for docker tag
+      id: docker-tag
+      run: |
+          echo "${{ inputs.semver }}"
+          ver=`echo "${{ inputs.semver }}" | sed 's/\+//'`
+          echo "$ver"
+          echo "dockertag=$ver" >> $GITHUB_OUTPUT
     - name: Build the django app image
       run: |
         docker build . \
             --tag ghcr.io/cyrenity/tempo-app:latest \
-            --tag ghcr.io/cyrenity/tempo-app:${{ inputs.semver }} 
+            --tag ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.dockertag }} 
         docker push ghcr.io/cyrenity/tempo-app:latest
-        docker push ghcr.io/cyrenity/tempo-app:${{ inputs.semver }}
+        docker push ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.dockertag }}
