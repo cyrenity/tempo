@@ -24,13 +24,13 @@ jobs:
       id: docker-tag
       run: |
           echo "${{ inputs.semver }}"
-          ver=`echo "${{ inputs.semver }}" | sed 's/\+//'`
+          ver=`echo "${{ inputs.semver }}" | sed 's/\+/-/'`
           echo "$ver"
           echo "dockertag=$ver" >> $GITHUB_OUTPUT
     - name: Build the django app image
       run: |
         docker build . \
             --tag ghcr.io/cyrenity/tempo-app:latest \
-            --tag ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.dockertag }} 
+            --tag ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.outputs.dockertag }} 
         docker push ghcr.io/cyrenity/tempo-app:latest
-        docker push ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.dockertag }}
+        docker push ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.outputs.dockertag }}
