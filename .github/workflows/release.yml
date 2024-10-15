@@ -62,6 +62,7 @@ jobs:
         uses: actions/checkout@v4
   build:
     name: Build
+    needs: [release]
     uses: cyrenity/tempo/.github/workflows/build.yml@main
     with: 
       semver: ${{ steps.format.outputs.semver }}
