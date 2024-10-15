@@ -64,7 +64,7 @@ jobs:
     name: Build
     uses: cyrenity/tempo/.github/workflows/build.yml@main
     with: 
-      version: ${{ steps.format.outputs.semver }}
+      semver: ${{ steps.format.outputs.semver }}
 
 
     
