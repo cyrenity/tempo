@@ -31,6 +31,6 @@ jobs:
       run: |
         docker build . \
             --tag ghcr.io/cyrenity/tempo-app:latest \
-            --tag ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.dockertag }} 
+            --tag ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.outputs.dockertag }} 
         docker push ghcr.io/cyrenity/tempo-app:latest
-        docker push ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.dockertag }}
+        docker push ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.outputs.dockertag }}
