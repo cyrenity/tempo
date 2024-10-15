@@ -1,0 +1,24 @@
+name: Build Docker Images
+on:
+    workflow_dispatch:
+
+jobs:
+  build-voiceware:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@main 
+    - name: 'Login to GitHub Container Registry'
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{secrets.GH_USER}}
+        password: ${{secrets.GH_TOKEN}}
+   
+    - name: Build the django app image
+      run: |
+        docker build . \
+            --tag ghcr.io/cyrenity/tempo-app:latest \
+            --tag ghcr.io/cyrenity/tempo-app:${GITHUB_SHA::7} 
+        docker push ghcr.io/cyrenity/tempo-app:latest
+        docker push ghcr.io/cyrenity/tempo-app:${GITHUB_SHA::7}
