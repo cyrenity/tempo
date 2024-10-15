@@ -9,6 +9,7 @@ jobs:
   health:
     name: Code Quality
     uses: cyrenity/tempo/.github/workflows/health-check.yml@main
+    
   version:
     name: Create Version
     permissions: write-all
@@ -60,17 +61,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-  build:
-    name: Build
-    permissions: write-all
-    needs: [release]
-    uses: cyrenity/tempo/.github/workflows/build.yml@main
-    with: 
-      semver: 1.1.0
-
-
-    
-        
      # - name: "Create release"
      #   uses: "marvinpinto/action-automatic-releases@latest"
      #   with:
@@ -100,3 +90,11 @@ jobs:
               repo: context.repo.repo,
               ref: "tags/${{ needs.version.outputs.semver }}"
             })
+
+  build:
+    name: Build
+    permissions: write-all
+    needs: [release]
+    uses: cyrenity/tempo/.github/workflows/build.yml@main
+    with: 
+      semver: 1.1.0
