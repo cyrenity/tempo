@@ -60,6 +60,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+  build:
+    name: Build
+    uses: cyrenity/tempo/.github/workflows/build.yml@main
+    with: 
+      version: ${{ steps.format.outputs.semver }}
+
+
+    
         
      # - name: "Create release"
      #   uses: "marvinpinto/action-automatic-releases@latest"
