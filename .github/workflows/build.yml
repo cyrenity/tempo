@@ -24,7 +24,7 @@ jobs:
       id: docker-tag
       run: |
           echo "${{ inputs.semver }}"
-          ver=`echo "${{ inputs.semver }}" | sed 's/\+//'`
+          ver=`echo "${{ inputs.semver }}" | sed 's/\+/-/'`
           echo "$ver"
           echo "dockertag=$ver" >> $GITHUB_OUTPUT
     - name: Build the django app image
