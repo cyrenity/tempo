@@ -100,3 +100,5 @@ jobs:
     uses: cyrenity/tempo/.github/workflows/build.yml@main
     with: 
       semver: ${{ needs.release.outputs.semver }}
+    secrets: inherit
+    
