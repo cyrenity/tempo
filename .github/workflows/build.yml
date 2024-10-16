@@ -9,7 +9,6 @@ on:
 jobs:
   build-voiceware:
     runs-on: ubuntu-latest
-    permissions: write-all
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@main 

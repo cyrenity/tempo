@@ -12,7 +12,6 @@ jobs:
     
   version:
     name: Create Version
-    permissions: write-all
     needs: [health]
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
@@ -44,7 +43,7 @@ jobs:
       - name: Create tag
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GH_TOKEN || github.token }}
+          github-token: ${{ secrets.GH_TOKEN }}
           script: |
             github.rest.git.createRef({
               owner: context.repo.owner,
@@ -55,7 +54,6 @@ jobs:
 
   release:
     name: Release
-    permissions: write-all
     runs-on: ubuntu-latest
     needs: [version]
     outputs:
@@ -85,7 +83,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GH_TOKEN || github.token }}
+          github-token: ${{ secrets.GH_TOKEN }}
           script: |
             github.rest.git.deleteRef({
               owner: context.repo.owner,
@@ -95,7 +93,6 @@ jobs:
 
   build:
     name: Build
-    permissions: write-all
     needs: [release]
     uses: cyrenity/tempo/.github/workflows/build.yml@main
     with: 
