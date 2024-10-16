@@ -77,7 +77,7 @@ jobs:
           generate_release_notes: true 
           draft: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           
       - name: Remove tag if failure
         if: ${{ failure() }}
