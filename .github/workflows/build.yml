@@ -29,7 +29,7 @@ jobs:
     - name: Build the django app image
       run: |
         docker build . \
-            --tag ghcr.io/cyrenity/tempo-app:latest \
-            --tag ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.outputs.dockertag }} 
-        docker push ghcr.io/cyrenity/tempo-app:latest
-        docker push ghcr.io/cyrenity/tempo-app:${{ steps.docker-tag.outputs.dockertag }}
+            --tag ghcr.io/${{ secrets.GH_USER }}/tempo-app:latest \
+            --tag ghcr.io/${{ secrets.GH_USER }}/tempo-app:${{ steps.docker-tag.outputs.dockertag }} 
+        docker push ghcr.io/${{ secrets.GH_USER }}/tempo-app:latest
+        docker push ghcr.io/${{ secrets.GH_USER }}/tempo-app:${{ steps.docker-tag.outputs.dockertag }}
