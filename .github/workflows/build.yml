@@ -9,7 +9,6 @@ on:
 jobs:
   build-voiceware:
     runs-on: ubuntu-latest
-    environment: Production
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@main 
@@ -34,3 +33,8 @@ jobs:
             --tag ghcr.io/${{ secrets.GH_USER }}/tempo-app:${{ steps.docker-tag.outputs.dockertag }} 
         docker push ghcr.io/${{ secrets.GH_USER }}/tempo-app:latest
         docker push ghcr.io/${{ secrets.GH_USER }}/tempo-app:${{ steps.docker-tag.outputs.dockertag }}
+        echo "This is the lead in sentence for the list" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY # this is a blank line
+        echo "- Lets add a bullet point" >> $GITHUB_STEP_SUMMARY
+        echo "- Lets add a second bullet point" >> $GITHUB_STEP_SUMMARY
+        echo "- How about a third one?" >> $GITHUB_STEP_SUMMARY
