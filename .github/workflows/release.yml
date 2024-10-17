@@ -15,6 +15,7 @@ jobs:
     needs: [health]
     if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
     runs-on: ubuntu-latest
+    permissions: write-all 
     outputs:
       semver: ${{ steps.format.outputs.semver }}
       semver_tag: ${{ steps.semver-tag.outputs.semver_tag }}
