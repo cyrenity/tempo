@@ -8,7 +8,7 @@ on:
 jobs:
   health:
     name: Code Quality
-    uses: cyrenity/tempo/.github/workflows/health-check.yml@main
+    uses: cyrenity/ReleaseWorkflow/.github/workflows/health-check.yml@main
     
   version:
     name: Create Version
@@ -94,7 +94,7 @@ jobs:
   build:
     name: Build
     needs: [release]
-    uses: cyrenity/tempo/.github/workflows/build.yml@main
+    uses: cyrenity/ReleaseWorkflow/.github/workflows/build.yml@main
     with: 
       semver: ${{ needs.release.outputs.semver }}
     secrets: inherit
