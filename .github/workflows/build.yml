@@ -9,6 +9,7 @@ on:
 jobs:
   build-voiceware:
     runs-on: ubuntu-latest
+    environment: Production
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@main 
